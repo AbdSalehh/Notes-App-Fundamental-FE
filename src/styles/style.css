@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    overflow-x: hidden;
+    background: rgb(243, 244, 246);
+}
+
+header {
+    width: 100%;
+    max-width: 52rem;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    padding-bottom: 3rem;
+    background: rgba(243, 244, 246, 0.4);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+}
+
+main {
+    max-width: 52rem;
+    margin: 0 auto;
+}
+
+.blob {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background-color: #0ea5e9;
+    border-radius: 50%;
+    top: -350px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+}
+
+.search-form {
+    position: relative;
+    height: 40px;
+    width: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-group {
+    width: 100%;
+    height: 100%;
+}
+
+.form-group input {
+    width: 100%;
+    height: 100%;
+    padding: 10px 26px 10px 10px;
+    border: 1px solid #ccc;
+    font-family: 'Inter', sans-serif;
+    border-radius: 5px;
+    outline: none;
+}
+
+.form-group label {
+    position: absolute;
+    left: 0;
+    z-index: -1;
+}
+
+.search-form button {
+    position: absolute;
+    right: 8px;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e293b;
+    border: 1px solid #0f172a;
+    color: white;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+/* tabs */
+
+.tabs {
+    padding: 1rem;
+    width: 100%;
+    height: fit-content;
+    position: relative;
+}
+
+.welcome-text {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.highlighted-text {
+    color: #0f172a;
+    font-weight: 800;
+    background: url(//s2.svgbox.net/pen-brushes.svg?ic=brush-3&color=7dd3fc);
+    margin: -2px -6px;
+    padding: 2px 6px;
+}
+
+.tab-header__wrapper {
+    position: sticky;
+    top: 0;
+}
+
+@media screen and (max-width: 480px) {
+    .welcome-text {
+        font-size: 26px;
+    }
+}
