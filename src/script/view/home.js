@@ -1,50 +1,43 @@
-import Helper from '../utils/helper.js';
-import { notesData } from '../data/notes.js';
+import {
+  displayNotes,
+  getArchivedNotes,
+  getNotes,
+} from "../data/notesServices.js";
 
 const home = () => {
-  const noteListElement = document.querySelector('note-list');
+  const noteListElement = document.querySelector("note-list");
   let currentTabIsArchived = false;
 
-  const displayNote = (archived) => {
-    currentTabIsArchived = archived;
-    const filteredNotes = notesData.filter(note => note.archived === archived);
-    displayNotes(filteredNotes);
-  };
-
-  const displayNotes = (notes) => {
-    Helper.emptyElement(noteListElement);
-
-    if (notes.length === 0) {
-      const noNotesMessage = document.createElement('p');
-      noNotesMessage.textContent = "Tidak ada catatan";
-      noNotesMessage.style.textAlign = "center";
-      noNotesMessage.style.marginTop = "20px";
-      noNotesMessage.style.fontSize = "16px";
-      noNotesMessage.style.color = "grey";
-      noteListElement.appendChild(noNotesMessage);
-    } else {
-      const noteItemElements = notes.map((note) => {
-        const noteItemElement = document.createElement('note-item');
-        noteItemElement.note = note;
-        return noteItemElement;
-      });
-      noteListElement.append(...noteItemElements);
-    }
-  };
-
-  displayNote(false);
+  displayNotes(noteListElement, false, null, getNotes, getArchivedNotes);
   document.addEventListener("filterNotes", (event) => {
-    displayNote(event.detail.archived);
+      currentTabIsArchived = event.detail.archived;
+      displayNotes(
+          noteListElement,
+          event.detail.archived,
+          null,
+          getNotes,
+          getArchivedNotes
+      );
   });
 
-  document.addEventListener("sortNotes", (event) => {
-    const { order } = event.detail;
-    const sortedNotes = notesData
-      .filter(note => note.archived === currentTabIsArchived)
-      .sort((a, b) => {
-        return order === 'ascending' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title);
-      });
-    displayNotes(sortedNotes);
+  document.addEventListener("sortNotes", async (event) => {
+      const { order } = event.detail;
+      const notes = currentTabIsArchived
+          ? await getArchivedNotes()
+          : await getNotes();
+      const sortedNotes = notes.data.sort((a, b) =>
+          order === "ascending"
+              ? a.title.localeCompare(b.title)
+              : b.title.localeCompare(a.title)
+      );
+
+      displayNotes(
+          noteListElement,
+          currentTabIsArchived,
+          sortedNotes,
+          getNotes,
+          getArchivedNotes
+      );
   });
 };
 

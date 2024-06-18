@@ -1,7 +1,15 @@
+import {
+    createNote,
+    displayNotes,
+    getArchivedNotes,
+    getNotes,
+} from "../data/notesServices";
+import { Toast } from "../utils/toast";
+
 class AddForm extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
+        this.attachShadow({ mode: "open" });
         this.render();
     }
 
@@ -44,8 +52,8 @@ class AddForm extends HTMLElement {
                 font-size: 15px;
                 padding: 10px;
                 color: white;
-                background-color: #1e293b;
-                border: 1px solid #0f172a;
+                background-color: #075985;
+                border: 1px solid #075985;
                 border-radius: 5px;
                 cursor: pointer;
                 transition: all 300ms ease-in-out;
@@ -97,8 +105,12 @@ class AddForm extends HTMLElement {
         const bodyInput = this.shadowRoot.querySelector("#body");
         const titleError = this.shadowRoot.querySelector(".title-error");
         const bodyError = this.shadowRoot.querySelector(".body-error");
-        const titleCharCount = this.shadowRoot.querySelector(".title-error + .char-count span");
-        const bodyCharCount = this.shadowRoot.querySelector(".body-error + .char-count span");
+        const titleCharCount = this.shadowRoot.querySelector(
+            ".title-error + .char-count span"
+        );
+        const bodyCharCount = this.shadowRoot.querySelector(
+            ".body-error + .char-count span"
+        );
 
         titleInput.addEventListener("input", () => {
             const maxTitleLength = 50;
@@ -128,7 +140,7 @@ class AddForm extends HTMLElement {
             bodyCharCount.textContent = `${bodyInput.value.length}`;
         });
 
-        form.addEventListener("submit", (e) => {
+        form.addEventListener("submit", async (e) => {
             e.preventDefault();
             titleError.textContent = "";
             bodyError.textContent = "";
@@ -149,14 +161,45 @@ class AddForm extends HTMLElement {
                 return;
             }
 
-            console.log("Catatan baru ditambahkan:", {
-                title: titleInput.value,
-                body: bodyInput.value
-            });
+            try {
+                const noteListElement = document.querySelector("note-list");
+                const tabsComponent = document.querySelector("tab-element");
+                const activeButton =
+                    tabsComponent.shadowRoot.querySelector(".active-button");
+                const archiveButton =
+                    tabsComponent.shadowRoot.querySelector(".archive-button");
+                const popupWrapper =
+                    tabsComponent.shadowRoot.getElementById("popup-wrapper");
 
-            form.reset();
+                await createNote({
+                    title: titleInput.value,
+                    body: bodyInput.value,
+                });
+
+                if (archiveButton.classList.contains("active")) {
+                    archiveButton.classList.remove("active");
+                    activeButton.classList.add("active");
+                }
+
+                Toast("Catatan berhasil ditambahkan", "#16a34a");
+
+                displayNotes(
+                    noteListElement,
+                    false,
+                    null,
+                    getNotes,
+                    getArchivedNotes
+                );
+                form.reset();
+
+                if (popupWrapper?.classList.contains("active")) {
+                    popupWrapper.classList.remove("active");
+                }
+            } catch (error) {
+                Toast("Catatan gagal ditambahkan", "#dc2626");
+            }
         });
     }
 }
 
-customElements.define('add-form-element', AddForm);
+customElements.define("add-form-element", AddForm);

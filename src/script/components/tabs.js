@@ -1,28 +1,29 @@
-import './add-form.js'; 
+import "./add-form.js";
+import { getArchivedNotes, getNotes } from "../data/notesServices.js";
 
 class Tabs extends HTMLElement {
     _shadowRoot = null;
     _style = null;
 
     static get observedAttributes() {
-        return ['sort-order'];
+        return ["sort-order"];
     }
 
     constructor() {
         super();
 
-        this._shadowRoot = this.attachShadow({ mode: 'open' });
-        this._style = document.createElement('style');
+        this._shadowRoot = this.attachShadow({ mode: "open" });
+        this._style = document.createElement("style");
     }
 
     connectedCallback() {
         this.render();
 
         const sortButton = this._shadowRoot.querySelector(".sort");
-        let sortOrder = 'ascending';
+        let sortOrder = "ascending";
         sortButton.addEventListener("click", () => {
-            sortOrder = sortOrder === 'ascending' ? 'descending' : 'ascending';
-            this.setAttribute('sort-order', sortOrder);
+            sortOrder = sortOrder === "ascending" ? "descending" : "ascending";
+            this.setAttribute("sort-order", sortOrder);
         });
     }
 
@@ -241,8 +242,7 @@ class Tabs extends HTMLElement {
         
             .open-modal-button {
                 position: absolute;
-                left: 50%;
-                transform: translateX(-70%);
+                left: 40%;
                 bottom: 50px;
             }
         
@@ -269,7 +269,7 @@ class Tabs extends HTMLElement {
     }
 
     _emptyContent() {
-        this._shadowRoot.innerHTML = '';
+        this._shadowRoot.innerHTML = "";
     }
 
     render() {
@@ -280,10 +280,10 @@ class Tabs extends HTMLElement {
         this._shadowRoot.innerHTML += `
         <div class="tab-header__wrapper">
             <div class="tab-header">
-                <button class="tab-button active">
+                <button class="tab-button active-button active">
                     <ion-icon name="checkmark-circle"></ion-icon><span>Active</span>
                 </button>
-                <button class="tab-button">
+                <button class="tab-button archive-button">
                     <ion-icon name="archive" class="tab-icon archive"></ion-icon><span>Archived</span>
                 </button>
             </div>
@@ -313,17 +313,22 @@ class Tabs extends HTMLElement {
     }
 
     addEventListeners() {
-        const popupButton = this._shadowRoot.querySelector(".open-modal-button");
+        const popupButton =
+            this._shadowRoot.querySelector(".open-modal-button");
         const popupWrapper = this._shadowRoot.getElementById("popup-wrapper");
-        const tabHeaderNodes = this._shadowRoot.querySelectorAll(".tab-header > button");
+        const tabHeaderNodes = this._shadowRoot.querySelectorAll(
+            ".tab-header > button"
+        );
 
-        popupButton.addEventListener("click", () => {
+        popupButton?.addEventListener("click", () => {
             popupWrapper.classList.add("active");
         });
 
-        this._shadowRoot.querySelector(".close").addEventListener("click", () => {
-            popupWrapper.classList.remove("active");
-        });
+        this._shadowRoot
+            .querySelector(".close")
+            .addEventListener("click", () => {
+                popupWrapper.classList.remove("active");
+            });
 
         this._shadowRoot.addEventListener("click", (event) => {
             if (event.target.classList.contains("overlay")) {
@@ -331,22 +336,45 @@ class Tabs extends HTMLElement {
             }
         });
 
-        tabHeaderNodes.forEach(node => {
+        tabHeaderNodes.forEach((node) => {
             node.addEventListener("click", () => this.handleTabClick(node));
         });
     }
 
     handleTabClick(node) {
+        const noteListElement = document.querySelector("note-list");
+
         this._shadowRoot.querySelector(".active").classList.remove("active");
         node.classList.add("active");
         const icon = node.querySelector("ion-icon");
         const isArchived = icon.classList.contains("archive");
-        document.dispatchEvent(new CustomEvent("filterNotes", { detail: { archived: isArchived } }));
+
+        noteListElement.showLoading();
+
+        const getNotesFunction = isArchived ? getArchivedNotes : getNotes;
+        getNotesFunction()
+            .then(() => {
+                noteListElement.hideLoading();
+            })
+            .catch((error) => {
+                console.error("Error loading notes:", error);
+                noteListElement.hideLoading();
+            });
+
+        document.dispatchEvent(
+            new CustomEvent("filterNotes", {
+                detail: { archived: isArchived },
+            })
+        );
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if (name === 'sort-order') {
-            document.dispatchEvent(new CustomEvent("sortNotes", { detail: { order: newValue } }));
+        if (name === "sort-order") {
+            document.dispatchEvent(
+                new CustomEvent("sortNotes", {
+                    detail: { order: newValue },
+                })
+            );
             const sortButton = this._shadowRoot.querySelector(".sort");
             sortButton.classList.remove("ascending", "descending");
             sortButton.classList.add(newValue);
@@ -354,4 +382,4 @@ class Tabs extends HTMLElement {
     }
 }
 
-customElements.define('tab-element', Tabs);
+customElements.define("tab-element", Tabs);

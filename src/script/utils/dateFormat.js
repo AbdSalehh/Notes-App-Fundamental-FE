@@ -1,11 +1,29 @@
 export const DateFormat = (isoDate) => {
     const date = new Date(isoDate);
 
-    const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const days = [
+        "Minggu",
+        "Senin",
+        "Selasa",
+        "Rabu",
+        "Kamis",
+        "Jumat",
+        "Sabtu",
+    ];
 
     const months = [
-    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
     ];
 
     const dayName = days[date.getDay()];
@@ -16,4 +34,4 @@ export const DateFormat = (isoDate) => {
     const formattedDate = `${dayName}, ${day} ${monthName} ${year}`;
 
     return formattedDate;
-}
+};
