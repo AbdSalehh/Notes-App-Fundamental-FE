@@ -3,7 +3,7 @@ import {
     displayNotes,
     getArchivedNotes,
     getNotes,
-} from "../data/notesServices";
+} from "../data/noteServices";
 import { Toast } from "../utils/toast";
 
 class AddForm extends HTMLElement {

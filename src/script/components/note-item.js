@@ -5,7 +5,7 @@ import {
     unarchiveNote,
     getNotes,
     getArchivedNotes,
-} from "../data/notesServices.js";
+} from "../data/noteServices.js";
 import { DateFormat } from "../utils/dateFormat.js";
 import { Toast } from "../utils/toast.js";
 

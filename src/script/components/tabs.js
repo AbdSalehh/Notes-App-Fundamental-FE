@@ -1,5 +1,5 @@
 import "./add-form.js";
-import { getArchivedNotes, getNotes } from "../data/notesServices.js";
+import { getArchivedNotes, getNotes } from "../data/noteServices.js";
 
 class Tabs extends HTMLElement {
     _shadowRoot = null;

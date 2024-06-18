@@ -1,29 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="./note-logo.png" sizes="512x512" />
+        <meta
+            name="description"
+            content="This app is a handy tool for recording, organizing and managing important information and also supports quick sorting and searching."
+        />
+        <title>Notes App</title>
+    </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./src/styles/style.css">
-  <link rel="icon" type="image/x-icon" href="./public/note-logo.png">
-  <title>Notes App</title>
-</head>
-
-<body>
-  <header>
-    <app-bar></app-bar>
-  </header>
-  <main>
-    <div class="blob"></div>
-    <div class="tabs">
-      <h1 class="welcome-text">Hi, Welcome to <span class="highlighted-text">Notes App!</span></h1>
-      <tab-element></tab-element>
-      <note-list></note-list>
-    </div>
-  </main>
-  <script type="module" src="./src/app.js"></script>
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-</body>
-
+    <body>
+        <header>
+            <app-bar></app-bar>
+        </header>
+        <main>
+            <div class="blob"></div>
+            <div class="tabs">
+                <h1 class="welcome-text">
+                    Hi, Welcome to
+                    <span class="highlighted-text">Notes App!</span>
+                </h1>
+                <tab-element></tab-element>
+                <note-list></note-list>
+            </div>
+        </main>
+        <script
+            type="module"
+            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+        ></script>
+        <script
+            nomodule
+            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+        ></script>
+    </body>
 </html>
